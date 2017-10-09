@@ -6,6 +6,7 @@ import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.exceptions.TelegramApiException
 import ua.kpi.atlantida.data.properties.TelegramProperties
+import ua.kpi.atlantida.presentation.CommandHandler
 
 /**
  * Created by vlad on 09.10.17.
@@ -20,7 +21,15 @@ class AtlantidaVisitBot: TelegramLongPollingBot() {
 
     override fun onUpdateReceived(update: Update?) {
         if (update?.hasMessage()!!) {
-            println("message: ${update.message.text}")
+            CommandHandler(update.message, this).start()
+        }
+    }
+
+    fun sendReply(message: BotApiMethod<Message>) {
+        try {
+            sendApiMethod(message)
+        } catch (e: TelegramApiException) {
+            println("Bot sendReply ex: ${e.printStackTrace()}")
         }
     }
 
